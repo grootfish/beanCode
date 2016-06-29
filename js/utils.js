@@ -38,6 +38,13 @@
                 el.className +=' '+className;
             }
         },
+        removeClass:function(el,className){
+            if(el.classList){
+                el.classList.remove(className);
+            }else{
+                el.className =el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+            }
+        },
         /**
          * 在dom元素后插入htmlString
          * @param  {DOM} el             在此dom元素后面插入
@@ -76,6 +83,46 @@
          */
         clone:function(el){
             return el.cloneNode(true);
+        },
+        /**
+         * 目标元素是否包含某个子元素
+         * @param  {DOM} el        目标元素
+         * @param  {DOM} child     判断包含的元素
+         * @return {Boolean}       返回是否包含
+         */
+        contains:function(el,child){
+            return el!==child&&el.contains(child);
+        },
+        /**
+         * 目标元素是否存在匹配选择器子孙元素
+         * @param  {DOM} el           目标元素
+         * @param  {String} selector  匹配选择器
+         * @return {Boolean}          是否存在
+         */
+        exist:function(el,selector){
+            return el.querySelector(selector) !==null;
+        },
+        /**
+         * 节点遍历方法
+         * @param  {String}   selector 选择器字符串
+         * @param  {Function} fn       遍历回调函数，包含两个参数，第一个参数是当前元素节点本身，第二个参数是当前节点的索引
+         * @return {Void}
+         */
+        each:function(selector,fn){
+            var elements = document.querySelectorAll(selector);
+            for(var i =0;i<elements.length;i++){
+                fn(elements[i],i);
+            }
+        },
+        /**
+         * 删除目标元素子节点
+         * @param  {DOM} el  目标节点
+         * @return {Void}
+         */
+        empty:function(el){
+            while(el.firstChild){
+                el.removeChild(el.firstChild);
+            }
         }
 
     };
