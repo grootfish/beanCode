@@ -19,31 +19,31 @@
             <li>我是七娃</li>
         </ul>
     </div>
-<script src="js/utils.js"></script>
+<script src="js/bean.js"></script>
 <script>
-     var type = Utils.type(1);
+     var type = Bean.type(1);
      var parent = document.querySelector('.parent');
      var child = parent.querySelector('.child');
      var calabash = parent.querySelector('.calabash');
 
-     Utils.addClass(parent,'on');
-     Utils.after(child,' <span class="childafter">爸爸</span>');
-     Utils.before(child,'<span class="childafter">太爷爷</span> ')
-     var calabashs = Utils.children(calabash);//葫芦娃们
-     Utils.removeClass(parent,'on');
-     var clone  = Utils.clone(calabashs[0]);
+     Bean.addClass(parent,'on');
+     Bean.after(child,' <span class="childafter">爸爸</span>');
+     Bean.before(child,'<span class="childafter">太爷爷</span> ')
+     var calabashs = Bean.children(calabash);//葫芦娃们
+     Bean.removeClass(parent,'on');
+     var clone  = Bean.clone(calabashs[0]);
      console.log(clone);
         clone.innerHTML = '我是葫芦小金刚';
-     Utils.after(calabashs[calabashs.length-1],clone.outerHTML);
-     Utils.each('.calabash li',function(ele,index){
+     Bean.after(calabashs[calabashs.length-1],clone.outerHTML);
+     Bean.each('.calabash li',function(ele,index){
         console.log(index+'.'+ele.innerHTML);
      });
 
-     Utils.empty(calabash);
+     Bean.empty(calabash);
 
 
-     var isChild = Utils.contains(parent,child);
-     var isExist = Utils.exist(parent,'.calabash');
+     var isChild = Bean.contains(parent,child);
+     var isExist = Bean.exist(parent,'.calabash');
      console.log(calabashs,isChild,isExist);
      console.log(parent,parent.innerHTML);
 </script>

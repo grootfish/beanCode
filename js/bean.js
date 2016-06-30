@@ -15,7 +15,7 @@
         _trim = String.prototype.trim,
         _indexOf = Array.prototype.indexOf;
 
-    var Utils = {
+    var Bean = {
         /**
          * 类型判断
          * @param  {Object} obj 任意类型数据
@@ -115,6 +115,22 @@
             }
         },
         /**
+         * 过滤元素节点
+         * @param  {String}   selector 选择器字符串
+         * @param  {Function} fn       过滤函数
+         * @return {Array}             返回过滤后的节点数组
+         */
+        filter:function(selector,fn){
+            var elements = document.querySelectorAll(selector);
+            var ret = [];
+            for(var i= elements.length;i--;){
+                if(fn(elements[i])){
+                    ret.unshift(elements[i]);
+                }
+            }
+            return ret;
+        },
+        /**
          * 删除目标元素子节点
          * @param  {DOM} el  目标节点
          * @return {Void}
@@ -123,9 +139,31 @@
             while(el.firstChild){
                 el.removeChild(el.firstChild);
             }
-        }
+        },
+        /**
+         * 获取文本内容
+         * @param  {DOM} el    目标元素
+         * @return {String}    文本内容
+         */
+        text:function(el){
+            return el.textContent || el.innerText;
+        },
+        /**
+         * 是否有某个类class
+         * @param  {DOM}  el           目标元素
+         * @param  {String}  className 选择器表达式
+         * @return {Boolean}           返回是否包含类名class
+         */
+        hasClass:function(el,className){
+            if(el.classList){
+                return el.classList.contains(className);
+            }else{
+                return new RegExp('(^| )'+className+'( |$)','gi').test(el.className);
+            }
+        },
+
 
     };
 
-    win.Utils = Utils;
+    win.Bean = Bean;
 })(window);
