@@ -26,6 +26,9 @@
      var child = parent.querySelector('.child');
      var calabash = parent.querySelector('.calabash');
 
+     var rect = parent.getBoundingClientRect();
+     console.dir(rect);
+
      Bean.addClass(parent,'on');
      Bean.after(child,' <span class="childafter">爸爸</span>');
      Bean.before(child,'<span class="childafter">太爷爷</span> ')
@@ -38,8 +41,10 @@
      Bean.each('.calabash li',function(ele,index){
         console.log(index+'.'+ele.innerHTML);
      });
-
-     Bean.empty(calabash);
+     Bean.text(child,'爷爷');
+     var childStr = Bean.text(child);
+     console.log(childStr);
+     // Bean.empty(calabash);
 
 
      var isChild = Bean.contains(parent,child);
