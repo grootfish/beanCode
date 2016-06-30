@@ -58,7 +58,7 @@
                 var classes = el.className.split(' ');
                 var existIndex = -1;
 
-                for (var i = classes.length; i--) {
+                for (var i = classes.length; i--;) {
                     if (classes[i] === className) {
                         existIndex = i;
                     }
@@ -259,7 +259,7 @@
         siblings: function(el) {
             var siblings = _slice.call(el.parentNode.children);
 
-            for (var i = siblings.length; i--) {
+            for (var i = siblings.length; i--;) {
                 if (siblings[i] === el) {
                     siblings.splice(i, 1);
                     break;
@@ -290,7 +290,9 @@
         on: function(el, eventName, eventHandler) {
             function addEventListener(el, eventName, handler) {
                 if (el.addEventListener) {
-                    el.addEventListener(eventName, handler);
+                    el.addEventListener(eventName, function(){
+                        handler.call(el);
+                    });
                 } else {
                     el.attachEvent('on' + eventName, function() {
                         handler.call(el);
@@ -298,7 +300,7 @@
                 }
             }
 
-            addEventListener(el, eventName, handler);
+            addEventListener(el, eventName, eventHandler);
         },
         /**
          * 删除事件
@@ -310,12 +312,16 @@
         off: function(el, eventName, eventHandler) {
             function removeEventListener(el, eventName, handler) {
                 if (el.removeEventListener) {
-                    el.removeEventListener(eventName, handler);
+                    el.removeEventListener(eventName, function(){
+                        handler.call(el);
+                    });
                 } else {
-                    el.detachEvent('on' + eventName, handler);
+                    el.detachEvent('on' + eventName, function(){
+                        handler.call(el);
+                    });
                 }
             }
-            removeEventListener(el, eventName, handler);
+            removeEventListener(el, eventName, eventHandler);
         },
     };
 

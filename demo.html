@@ -41,11 +41,36 @@
      Bean.each('.calabash li',function(ele,index){
         console.log(index+'.'+ele.innerHTML);
      });
+     var big = Bean.filter('.calabash li',function(ele,index){
+        return ele.innerHTML == '我是葫芦小金刚';
+     });
      Bean.text(child,'爷爷');
      var childStr = Bean.text(child);
-     console.log(childStr);
-     // Bean.empty(calabash);
 
+     var big = calabash.querySelector('li:last-child');
+     Bean.text(big,'我是葫芦小金刚,前面七个合成了我！');
+     Bean.html(big,'<a href="#">我是葫芦小金刚,前面七个合成了我！<a>');
+     Bean.addClass(big,'big');
+     var isBig = Bean.hasClass(big,'big');
+     console.log(isBig);
+     console.log(childStr,big);
+     var seven = Bean.prev(big);
+     var big = Bean.next(seven);
+     console.log(seven.innerText,big.innerText);
+     console.log(Bean.offset(seven));
+     // Bean.empty(calabash);
+     var calabashs = Bean.siblings(seven);
+     for(var i=calabashs.length;i--;){
+        console.log(i+','+calabashs[i].innerHTML);
+     }
+
+     Bean.on(big,'click',function(){
+        this.style.background = "red";
+     });
+
+     Bean.off(big,'click',function(){
+        this.style.background = "red";
+     });
 
      var isChild = Bean.contains(parent,child);
      var isExist = Bean.exist(parent,'.calabash');
