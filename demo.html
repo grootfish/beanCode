@@ -64,9 +64,11 @@
         console.log(i+','+calabashs[i].innerHTML);
      }
 
-     Bean.on(big,'click',function(){
-        this.style.background = "red";
-     }).off(big,'click');
+     function toRed(){
+        alert(this);
+     }
+
+     Bean.on(big,'click',toRed).off(big,'click',toRed);
 
 
      var isChild = Bean.contains(parent,child);

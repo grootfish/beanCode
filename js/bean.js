@@ -290,13 +290,9 @@
         on: function(el, eventName, eventHandler) {
             function addEventListener(el, eventName, handler) {
                 if (el.addEventListener) {
-                    el.addEventListener(eventName, function() {
-                        handler.call(el);
-                    });
+                    el.addEventListener(eventName, handler);
                 } else {
-                    el.attachEvent('on' + eventName, function() {
-                        handler.call(el);
-                    });
+                    el.attachEvent('on' + eventName, handler);
                 }
             }
 
@@ -304,22 +300,19 @@
             return this;
         },
         /**
-         * 删除事件
+         * 删除事件(不能删除绑定的匿名函数)
          * @param  {Dom} el                目标元素
          * @param  {String} eventName      事件类型
          * @param  {Function} eventHandler 事件回调
          * @return {Void}
          */
         off: function(el, eventName, eventHandler) {
+            var _self = this;
             function removeEventListener(el, eventName, handler) {
                 if (el.removeEventListener) {
-                    el.removeEventListener(eventName, function() {
-                        handler.call(el);
-                    });
+                    el.removeEventListener(eventName, handler);
                 } else {
-                    el.detachEvent('on' + eventName, function() {
-                        handler.call(el);
-                    });
+                    el.detachEvent('on' + eventName, handler);
                 }
             }
             removeEventListener(el, eventName, eventHandler);
@@ -366,7 +359,9 @@
          * @return {Void}
          */
         proxy: function(fn, context, arguments) {
-            fn.apply(context, arguments);
+            return function(){
+                fn.apply(context, arguments);
+            }
         },
         /**
          * 数组遍历方法
@@ -441,6 +436,22 @@
                 }
             };
             extend({}, objA, objB);
+        },
+        /**
+         * 判断是否在数组中
+         * @param  {Number} value 目标数字
+         * @param  {Array} array  数组
+         * @return {Number}       返回-1在数组中没找到，其他返回在数组中的下标
+         */
+        inArray:function(value, array){
+            function indexOf(value,array){
+                for(var i=0;i<array.length;i++){
+                    if(array[i]===item)
+                        return i;
+                }
+                return -1;
+            }
+            indexOf(value,array);
         },
     };
     win.Bean = Bean;
