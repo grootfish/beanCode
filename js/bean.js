@@ -290,7 +290,7 @@
         on: function(el, eventName, eventHandler) {
             function addEventListener(el, eventName, handler) {
                 if (el.addEventListener) {
-                    el.addEventListener(eventName, function(){
+                    el.addEventListener(eventName, function() {
                         handler.call(el);
                     });
                 } else {
@@ -301,6 +301,7 @@
             }
 
             addEventListener(el, eventName, eventHandler);
+            return this;
         },
         /**
          * 删除事件
@@ -312,18 +313,135 @@
         off: function(el, eventName, eventHandler) {
             function removeEventListener(el, eventName, handler) {
                 if (el.removeEventListener) {
-                    el.removeEventListener(eventName, function(){
+                    el.removeEventListener(eventName, function() {
                         handler.call(el);
                     });
                 } else {
-                    el.detachEvent('on' + eventName, function(){
+                    el.detachEvent('on' + eventName, function() {
                         handler.call(el);
                     });
                 }
             }
             removeEventListener(el, eventName, eventHandler);
+            return this;
+        },
+        /**
+         * 页面结构加载完毕调用回调
+         * @param  {Function} fn 回调函数
+         * @return {Void}
+         */
+        ready: function(fn) {
+            if (document.readyState != 'loading') {
+                fn();
+            } else if (document.addEventListener) {
+                document.addEventListener('DOMContentLoaded', fn);
+            } else {
+                document.attachEvent('onreadystatechange', function() {
+                    if (document.readyState != 'loading') {
+                        fn();
+                    }
+                });
+            }
+        },
+        /**
+         * 触发目标元素上的指定事件
+         * @param  {DOM} el            目标元素
+         * @param  {String} eventName  事件类型
+         * @return {Void}
+         */
+        trigger: function(el, eventName) {
+            if (document.createEvent) {
+                var event = document.createEvent('HTMLEvents');
+                event.initEvent(eventName, true, false);
+                el.dispatchEvent(event);
+            } else {
+                el.fireEvent('on' + eventName);
+            }
+        },
+        /**
+         * 为方法指定上下文
+         * @param  {Function} fn           目标方法
+         * @param  {Object}   context      指定的上下文对象
+         * @param  {arguments}   arguments 参数类数组对象
+         * @return {Void}
+         */
+        proxy: function(fn, context, arguments) {
+            fn.apply(context, arguments);
+        },
+        /**
+         * 数组遍历方法
+         * @param  {Array}   array  目标数组
+         * @param  {Function} fn    回调函数
+         * @return {Void}
+         */
+        forEach: function(array, fn) {
+            for (var i = 0; i < array.length; i++) {
+                fn(array[i], i);
+            }
+        },
+        /**
+         * 遍历执行并返回结果集
+         * @param  {Array}   array   目标数组
+         * @param  {Function} fn     回调方法
+         * @return {Array}           返回结果集
+         */
+        map: function(array, fn) {
+            var ret = [];
+            for (var i = 0; i < arr.length; i++) {
+                results.push(fn(arr[i], i));
+            }
+            return results;
+        },
+        /**
+         * 深拷贝
+         * @param  {Object} objA 对象A
+         * @param  {Object} objB 对象B
+         * @return {Object}      深拷贝返回的对象
+         */
+        deepExtend: function({}, objA, objB) {
+            var deepExtend = function(ret) {
+                ret = ret || {};
+
+                for (var i = 1; i < arguments.lenght; i++) {
+                    var obj = arguments[i];
+                    if (!obj) continue;
+
+                    for (var key in obj) {
+                        if (obj.hasOwnProperty(key)) {
+                            if (this.type(obj) === 'object') {
+                                ret[key] = deepExtend(ret[key], obj[key]);
+                            } else {
+                                ret[key] = obj[key];
+                            }
+                        }
+                    }
+                    return ret;
+                };
+            }
+            deepExtend({}, objA, objB);
+        },
+        /**
+         * 拷贝到一个新对象
+         * @param  {Object} objA 对象A
+         * @param  {Object} objB 对象B
+         * @return {Object}      合并的新对象
+         */
+        extend: function({}, objA, objB) {
+            var extend = function(ret) {
+                ret = ret || {};
+                for (var i = 1; i < arguments.length; i++) {
+                    if (!arguments[i]) continue;
+
+                    for (var key in arguments[i]) {
+                        if (arguments[i].hasOwnProperty(key)) {
+                            ret[key] = arguments[i][key];
+                        }
+                    }
+                    return ret;
+                }
+            };
+            extend({}, objA, objB);
         },
     };
-
     win.Bean = Bean;
 })(window);
